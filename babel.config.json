@@ -20,7 +20,6 @@
 		"@babel/preset-typescript"
 	],
 	"plugins": [
-		"add-module-exports",
 		"@babel/plugin-proposal-dynamic-import",
 		[
 			"@babel/plugin-transform-modules-commonjs",

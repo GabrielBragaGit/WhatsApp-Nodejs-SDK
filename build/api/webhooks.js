@@ -94,4 +94,3 @@ class WebhooksAPI extends _base.default {
   }
 }
 exports.default = WebhooksAPI;
-module.exports = exports.default;

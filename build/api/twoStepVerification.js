@@ -34,4 +34,3 @@ class TwoStepVerificationAPI extends _base.default {
   }
 }
 exports.default = TwoStepVerificationAPI;
-module.exports = exports.default;

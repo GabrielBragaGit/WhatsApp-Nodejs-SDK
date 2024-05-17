@@ -36,4 +36,3 @@ class PhoneNumbersAPI extends _base.default {
   }
 }
 exports.default = PhoneNumbersAPI;
-module.exports = exports.default;

@@ -82,4 +82,3 @@ class MessagesAPI extends _base.default {
   }
 }
 exports.default = MessagesAPI;
-module.exports = exports.default;

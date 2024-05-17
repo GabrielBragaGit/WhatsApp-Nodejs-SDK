@@ -71,4 +71,3 @@ class WhatsApp {
 WhatsApp.Enums = SDKEnums;
 var _default = WhatsApp;
 exports.default = _default;
-module.exports = exports.default;

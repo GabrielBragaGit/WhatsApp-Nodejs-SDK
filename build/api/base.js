@@ -25,4 +25,3 @@ class BaseAPI {
   }
 }
 exports.default = BaseAPI;
-module.exports = exports.default;

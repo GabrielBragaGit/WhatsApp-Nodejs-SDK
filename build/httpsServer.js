@@ -39,4 +39,3 @@ class Httpserver {
   }
 }
 exports.default = Httpserver;
-module.exports = exports.default;

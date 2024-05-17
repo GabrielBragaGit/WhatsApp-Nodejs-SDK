@@ -50,4 +50,3 @@ class Requester {
   }
 }
 exports.default = Requester;
-module.exports = exports.default;
