@@ -4,7 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _logger = require("../logger");
+var _logger = _interopRequireDefault(require("../logger"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 /**
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  * All rights reserved.
@@ -15,7 +16,7 @@ var _logger = require("../logger");
 
 const LIB_NAME = 'BaseAPI';
 const LOG_LOCAL = false;
-const LOGGER = new _logger(LIB_NAME, process.env.DEBUG === 'true' || LOG_LOCAL);
+const LOGGER = new _logger.default(LIB_NAME, process.env.DEBUG === 'true' || LOG_LOCAL);
 class BaseAPI {
   constructor(config, HttpsClient) {
     this.client = HttpsClient;

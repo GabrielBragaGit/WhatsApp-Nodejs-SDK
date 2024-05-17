@@ -6,9 +6,10 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _enums = require("../types/enums");
 var _utils = require("../utils");
-var _httpsServer = require("../httpsServer");
-var _base = require("./base");
-var _logger = require("../logger");
+var _httpsServer = _interopRequireDefault(require("../httpsServer"));
+var _base = _interopRequireDefault(require("./base"));
+var _logger = _interopRequireDefault(require("../logger"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 /**
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  * All rights reserved.
@@ -19,14 +20,14 @@ var _logger = require("../logger");
 
 const LIB_NAME = 'WEBHOOKS';
 const LOG_LOCAL = true;
-const LOGGER = new _logger(LIB_NAME, process.env.DEBUG === 'true' || LOG_LOCAL);
-class WebhooksAPI extends _base {
+const LOGGER = new _logger.default(LIB_NAME, process.env.DEBUG === 'true' || LOG_LOCAL);
+class WebhooksAPI extends _base.default {
   constructor(config, HttpsClient, userAgent) {
     super(config, HttpsClient);
     this.userAgent = userAgent;
   }
   start(cb) {
-    this.server = new _httpsServer(this.config[_enums.WAConfigEnum.ListenerPort], (req, res) => {
+    this.server = new _httpsServer.default(this.config[_enums.WAConfigEnum.ListenerPort], (req, res) => {
       res.setHeader('User-Agent', this.userAgent);
       if (req.url) {
         const requestPath = new URL(req.url, `https://${req.headers.host}`);

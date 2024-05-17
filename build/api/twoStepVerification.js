@@ -4,9 +4,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _base = require("./base");
+var _base = _interopRequireDefault(require("./base"));
 var _enums = require("../types/enums");
-var _logger = require("../logger");
+var _logger = _interopRequireDefault(require("../logger"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 /**
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  * All rights reserved.
@@ -17,8 +18,8 @@ var _logger = require("../logger");
 
 const LIB_NAME = 'TWOSTEPVERIFICATION_API';
 const LOG_LOCAL = false;
-const LOGGER = new _logger(LIB_NAME, process.env.DEBUG === 'true' || LOG_LOCAL);
-class TwoStepVerificationAPI extends _base {
+const LOGGER = new _logger.default(LIB_NAME, process.env.DEBUG === 'true' || LOG_LOCAL);
+class TwoStepVerificationAPI extends _base.default {
   constructor() {
     super(...arguments);
     this.commonMethod = _enums.HttpMethodsEnum.Post;

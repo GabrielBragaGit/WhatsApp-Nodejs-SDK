@@ -5,8 +5,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = exports.HttpsClientResponse = void 0;
 var _https = require("https");
-var _logger = require("./logger");
+var _logger = _interopRequireDefault(require("./logger"));
 var _enums = require("./types/enums");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 /**
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  * All rights reserved.
@@ -17,7 +18,7 @@ var _enums = require("./types/enums");
 
 const LIB_NAME = 'HttpsClient';
 const LOG_LOCAL = false;
-const LOGGER = new _logger(LIB_NAME, process.env.DEBUG === 'true' || LOG_LOCAL);
+const LOGGER = new _logger.default(LIB_NAME, process.env.DEBUG === 'true' || LOG_LOCAL);
 class HttpsClient {
   constructor() {
     this.agent = new _https.Agent({
