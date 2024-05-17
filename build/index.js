@@ -10,3 +10,4 @@ Object.defineProperty(exports, "__esModule", {
 });
 const WhatsApp_1 = __importDefault(require("./WhatsApp"));
 module.exports = WhatsApp_1.default;
+exports.default = WhatsApp_1.default;
