@@ -43,9 +43,9 @@ export default class WhatsApp implements WhatsAppClass {
 	readonly webhooks: WebhooksAPI;
 	static readonly Enums = SDKEnums;
 
-	constructor(senderNumberId?: number) {
+	constructor(config: Partial<WAConfigType>, senderNumberId?: number) {
 		this.sdkVersion = SDKVersion;
-		this.config = importConfig(senderNumberId);
+		this.config = importConfig(config, senderNumberId);
 		this.requester = new Requester(
 			this.config[SDKEnums.WAConfigEnum.BaseURL],
 			this.config[SDKEnums.WAConfigEnum.APIVersion],

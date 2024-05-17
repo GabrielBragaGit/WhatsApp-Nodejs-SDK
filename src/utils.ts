@@ -7,9 +7,9 @@
  */
 
 import * as crypto from 'crypto';
-import { WAConfigType } from './types/config';
-import { WARequiredConfigEnum, WAConfigEnum } from './types/enums';
 import Logger from './logger';
+import { WAConfigType } from './types/config';
+import { WAConfigEnum, WARequiredConfigEnum } from './types/enums';
 
 const LIB_NAME = 'UTILS';
 const LOG_LOCAL = false;
@@ -44,18 +44,31 @@ const emptyConfigChecker = (senderNumberId?: number) => {
 	}
 };
 
-export const importConfig = (senderNumberId?: number) => {
+export const importConfig = (
+	configToImport: Partial<WAConfigType>,
+	senderNumberId?: number,
+) => {
 	emptyConfigChecker(senderNumberId);
 
 	const config: WAConfigType = {
 		[WAConfigEnum.BaseURL]: process.env.WA_BASE_URL || DEFAULT_BASE_URL,
-		[WAConfigEnum.AppId]: process.env.M4D_APP_ID || '',
+		[WAConfigEnum.AppId]:
+			configToImport[WAConfigEnum.AppId] || process.env.M4D_APP_ID || '',
 		[WAConfigEnum.AppSecret]: process.env.M4D_APP_SECRET || '',
 		[WAConfigEnum.PhoneNumberId]:
 			senderNumberId || parseInt(process.env.WA_PHONE_NUMBER_ID || ''),
-		[WAConfigEnum.BusinessAcctId]: process.env.WA_BUSINESS_ACCOUNT_ID || '',
-		[WAConfigEnum.APIVersion]: process.env.CLOUD_API_VERSION || '',
-		[WAConfigEnum.AccessToken]: process.env.CLOUD_API_ACCESS_TOKEN || '',
+		[WAConfigEnum.BusinessAcctId]:
+			configToImport[WAConfigEnum.BusinessAcctId] ||
+			process.env.WA_BUSINESS_ACCOUNT_ID ||
+			'',
+		[WAConfigEnum.APIVersion]:
+			configToImport[WAConfigEnum.APIVersion] ||
+			process.env.CLOUD_API_VERSION ||
+			'',
+		[WAConfigEnum.AccessToken]:
+			configToImport[WAConfigEnum.AccessToken] ||
+			process.env.CLOUD_API_ACCESS_TOKEN ||
+			'',
 		[WAConfigEnum.WebhookEndpoint]: process.env.WEBHOOK_ENDPOINT || '',
 		[WAConfigEnum.WebhookVerificationToken]:
 			process.env.WEBHOOK_VERIFICATION_TOKEN || '',
