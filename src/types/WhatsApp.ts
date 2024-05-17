@@ -10,7 +10,7 @@ import { WAConfigType } from './config';
 import { semanticVersionString } from './version';
 
 export declare class WhatsAppClass {
-	constructor(senderNumberId?: number, config?: Partial<WAConfigType>);
+	constructor(senderNumberId: number, config?: Partial<WAConfigType>);
 	version: () => semanticVersionString;
 	updateTimeout(ms: number): boolean;
 	updateSenderNumberId(phoneNumberId: number): boolean;
