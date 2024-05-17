@@ -6,5 +6,5 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { WAConfigType } from './types/config';
-export declare const importConfig: (senderNumberId?: number) => WAConfigType;
+export declare const importConfig: (senderNumberId?: number, configToImport?: Partial<WAConfigType>) => WAConfigType;
 export declare const generateXHub256Sig: (body: string, appSecret: string) => string;

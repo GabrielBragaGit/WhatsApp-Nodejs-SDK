@@ -45,10 +45,14 @@ const emptyConfigChecker = (senderNumberId?: number) => {
 };
 
 export const importConfig = (
-	configToImport: Partial<WAConfigType>,
 	senderNumberId?: number,
+	configToImport?: Partial<WAConfigType>,
 ) => {
 	emptyConfigChecker(senderNumberId);
+
+	if (configToImport === undefined) {
+		configToImport = {};
+	}
 
 	const config: WAConfigType = {
 		[WAConfigEnum.BaseURL]: process.env.WA_BASE_URL || DEFAULT_BASE_URL,

@@ -23,7 +23,7 @@ export default class WhatsApp implements WhatsAppClass {
     readonly twoStepVerification: TwoStepVerificationAPI;
     readonly webhooks: WebhooksAPI;
     static readonly Enums: typeof SDKEnums;
-    constructor(senderNumberId?: number);
+    constructor(senderNumberId?: number, config?: Partial<WAConfigType>);
     version(): semanticVersionString;
     private userAgent;
     updateTimeout(ms: number): boolean;

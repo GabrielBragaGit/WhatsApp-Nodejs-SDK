@@ -1,5 +1,8 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 /**
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  * All rights reserved.
