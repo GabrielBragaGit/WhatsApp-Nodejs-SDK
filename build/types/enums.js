@@ -1,5 +1,9 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.WebhookTypesEnum = exports.WARequiredConfigEnum = exports.WAConfigEnum = exports.VideoMediaTypesEnum = exports.SystemChangeTypesEnum = exports.StickerMediaTypesEnum = exports.StatusEnum = exports.RequestCodeMethodsEnum = exports.ReferralSourceTypesEnum = exports.ParametersTypesEnum = exports.MessageTypesEnum = exports.LanguagesEnum = exports.InteractiveTypesEnum = exports.ImageMediaTypesEnum = exports.HttpMethodsEnum = exports.DocumentMediaTypesEnum = exports.CurrencyCodesEnum = exports.ConversationTypesEnum = exports.ComponentTypesEnum = exports.ButtonTypesEnum = exports.ButtonPositionEnum = exports.AudioMediaTypesEnum = void 0;
 /**
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  * All rights reserved.
@@ -7,18 +11,16 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.CurrencyCodesEnum = exports.LanguagesEnum = exports.RequestCodeMethodsEnum = exports.ReferralSourceTypesEnum = exports.SystemChangeTypesEnum = exports.WebhookTypesEnum = exports.AudioMediaTypesEnum = exports.DocumentMediaTypesEnum = exports.ImageMediaTypesEnum = exports.StickerMediaTypesEnum = exports.VideoMediaTypesEnum = exports.StatusEnum = exports.ConversationTypesEnum = exports.WARequiredConfigEnum = exports.WAConfigEnum = exports.ComponentTypesEnum = exports.ButtonPositionEnum = exports.ButtonTypesEnum = exports.InteractiveTypesEnum = exports.ParametersTypesEnum = exports.MessageTypesEnum = exports.HttpMethodsEnum = void 0;
 var HttpMethodsEnum;
+exports.HttpMethodsEnum = HttpMethodsEnum;
 (function (HttpMethodsEnum) {
   HttpMethodsEnum["Get"] = "GET";
   HttpMethodsEnum["Post"] = "POST";
   HttpMethodsEnum["Put"] = "PUT";
   HttpMethodsEnum["Delete"] = "DELETE";
-})(HttpMethodsEnum = exports.HttpMethodsEnum || (exports.HttpMethodsEnum = {}));
+})(HttpMethodsEnum || (exports.HttpMethodsEnum = HttpMethodsEnum = {}));
 var MessageTypesEnum;
+exports.MessageTypesEnum = MessageTypesEnum;
 (function (MessageTypesEnum) {
   MessageTypesEnum["Audio"] = "audio";
   MessageTypesEnum["Contacts"] = "contacts";
@@ -31,8 +33,9 @@ var MessageTypesEnum;
   MessageTypesEnum["Template"] = "template";
   MessageTypesEnum["Text"] = "text";
   MessageTypesEnum["Video"] = "video";
-})(MessageTypesEnum = exports.MessageTypesEnum || (exports.MessageTypesEnum = {}));
+})(MessageTypesEnum || (exports.MessageTypesEnum = MessageTypesEnum = {}));
 var ParametersTypesEnum;
+exports.ParametersTypesEnum = ParametersTypesEnum;
 (function (ParametersTypesEnum) {
   ParametersTypesEnum["Currency"] = "currency";
   ParametersTypesEnum["DateTime"] = "date_time";
@@ -41,33 +44,38 @@ var ParametersTypesEnum;
   ParametersTypesEnum["Text"] = "text";
   ParametersTypesEnum["Video"] = "video";
   ParametersTypesEnum["Payload"] = "payload";
-})(ParametersTypesEnum = exports.ParametersTypesEnum || (exports.ParametersTypesEnum = {}));
+})(ParametersTypesEnum || (exports.ParametersTypesEnum = ParametersTypesEnum = {}));
 var InteractiveTypesEnum;
+exports.InteractiveTypesEnum = InteractiveTypesEnum;
 (function (InteractiveTypesEnum) {
   InteractiveTypesEnum["Button"] = "button";
   InteractiveTypesEnum["List"] = "list";
   InteractiveTypesEnum["Product"] = "product";
   InteractiveTypesEnum["ProductList"] = "product_list";
   InteractiveTypesEnum["Flow"] = "flow";
-})(InteractiveTypesEnum = exports.InteractiveTypesEnum || (exports.InteractiveTypesEnum = {}));
+})(InteractiveTypesEnum || (exports.InteractiveTypesEnum = InteractiveTypesEnum = {}));
 var ButtonTypesEnum;
+exports.ButtonTypesEnum = ButtonTypesEnum;
 (function (ButtonTypesEnum) {
   ButtonTypesEnum["QuickReply"] = "quick_reply";
   ButtonTypesEnum["URL"] = "url";
-})(ButtonTypesEnum = exports.ButtonTypesEnum || (exports.ButtonTypesEnum = {}));
+})(ButtonTypesEnum || (exports.ButtonTypesEnum = ButtonTypesEnum = {}));
 var ButtonPositionEnum;
+exports.ButtonPositionEnum = ButtonPositionEnum;
 (function (ButtonPositionEnum) {
   ButtonPositionEnum[ButtonPositionEnum["First"] = 0] = "First";
   ButtonPositionEnum[ButtonPositionEnum["Second"] = 1] = "Second";
   ButtonPositionEnum[ButtonPositionEnum["Third"] = 2] = "Third";
-})(ButtonPositionEnum = exports.ButtonPositionEnum || (exports.ButtonPositionEnum = {}));
+})(ButtonPositionEnum || (exports.ButtonPositionEnum = ButtonPositionEnum = {}));
 var ComponentTypesEnum;
+exports.ComponentTypesEnum = ComponentTypesEnum;
 (function (ComponentTypesEnum) {
   ComponentTypesEnum["Header"] = "header";
   ComponentTypesEnum["Body"] = "body";
   ComponentTypesEnum["Button"] = "button";
-})(ComponentTypesEnum = exports.ComponentTypesEnum || (exports.ComponentTypesEnum = {}));
+})(ComponentTypesEnum || (exports.ComponentTypesEnum = ComponentTypesEnum = {}));
 var WAConfigEnum;
+exports.WAConfigEnum = WAConfigEnum;
 (function (WAConfigEnum) {
   WAConfigEnum["BaseURL"] = "WA_BASE_URL";
   WAConfigEnum["AppId"] = "M4D_APP_ID";
@@ -82,39 +90,46 @@ var WAConfigEnum;
   WAConfigEnum["MaxRetriesAfterWait"] = "MAX_RETRIES_AFTER_WAIT";
   WAConfigEnum["RequestTimeout"] = "REQUEST_TIMEOUT";
   WAConfigEnum["Debug"] = "DEBUG";
-})(WAConfigEnum = exports.WAConfigEnum || (exports.WAConfigEnum = {}));
+})(WAConfigEnum || (exports.WAConfigEnum = WAConfigEnum = {}));
 var WARequiredConfigEnum;
+exports.WARequiredConfigEnum = WARequiredConfigEnum;
 (function (WARequiredConfigEnum) {
   WARequiredConfigEnum["APIVersion"] = "CLOUD_API_VERSION";
   WARequiredConfigEnum["AccessToken"] = "CLOUD_API_ACCESS_TOKEN";
-})(WARequiredConfigEnum = exports.WARequiredConfigEnum || (exports.WARequiredConfigEnum = {}));
+})(WARequiredConfigEnum || (exports.WARequiredConfigEnum = WARequiredConfigEnum = {}));
 var ConversationTypesEnum;
+exports.ConversationTypesEnum = ConversationTypesEnum;
 (function (ConversationTypesEnum) {
   ConversationTypesEnum["BusinessInitiated"] = "business_initiated";
   ConversationTypesEnum["CustomerInitiated"] = "customer_initiated";
   ConversationTypesEnum["ReferralConversion"] = "referral_conversion";
-})(ConversationTypesEnum = exports.ConversationTypesEnum || (exports.ConversationTypesEnum = {}));
+})(ConversationTypesEnum || (exports.ConversationTypesEnum = ConversationTypesEnum = {}));
 var StatusEnum;
+exports.StatusEnum = StatusEnum;
 (function (StatusEnum) {
   StatusEnum["Delivered"] = "delivered";
   StatusEnum["Read"] = "read";
   StatusEnum["Sent"] = "sent";
-})(StatusEnum = exports.StatusEnum || (exports.StatusEnum = {}));
+})(StatusEnum || (exports.StatusEnum = StatusEnum = {}));
 var VideoMediaTypesEnum;
+exports.VideoMediaTypesEnum = VideoMediaTypesEnum;
 (function (VideoMediaTypesEnum) {
   VideoMediaTypesEnum["Mp4"] = "video/mp4";
   VideoMediaTypesEnum["Threegp"] = "video/3gp";
-})(VideoMediaTypesEnum = exports.VideoMediaTypesEnum || (exports.VideoMediaTypesEnum = {}));
+})(VideoMediaTypesEnum || (exports.VideoMediaTypesEnum = VideoMediaTypesEnum = {}));
 var StickerMediaTypesEnum;
+exports.StickerMediaTypesEnum = StickerMediaTypesEnum;
 (function (StickerMediaTypesEnum) {
   StickerMediaTypesEnum["Webp"] = "image/webp";
-})(StickerMediaTypesEnum = exports.StickerMediaTypesEnum || (exports.StickerMediaTypesEnum = {}));
+})(StickerMediaTypesEnum || (exports.StickerMediaTypesEnum = StickerMediaTypesEnum = {}));
 var ImageMediaTypesEnum;
+exports.ImageMediaTypesEnum = ImageMediaTypesEnum;
 (function (ImageMediaTypesEnum) {
   ImageMediaTypesEnum["Jpeg"] = "image/jpeg";
   ImageMediaTypesEnum["Png"] = "image/png";
-})(ImageMediaTypesEnum = exports.ImageMediaTypesEnum || (exports.ImageMediaTypesEnum = {}));
+})(ImageMediaTypesEnum || (exports.ImageMediaTypesEnum = ImageMediaTypesEnum = {}));
 var DocumentMediaTypesEnum;
+exports.DocumentMediaTypesEnum = DocumentMediaTypesEnum;
 (function (DocumentMediaTypesEnum) {
   DocumentMediaTypesEnum["Text"] = "text/plain";
   DocumentMediaTypesEnum["Pdf"] = "application/pdf";
@@ -124,16 +139,18 @@ var DocumentMediaTypesEnum;
   DocumentMediaTypesEnum["OpenDoc"] = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
   DocumentMediaTypesEnum["OpenPres"] = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
   DocumentMediaTypesEnum["OpenSheet"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-})(DocumentMediaTypesEnum = exports.DocumentMediaTypesEnum || (exports.DocumentMediaTypesEnum = {}));
+})(DocumentMediaTypesEnum || (exports.DocumentMediaTypesEnum = DocumentMediaTypesEnum = {}));
 var AudioMediaTypesEnum;
+exports.AudioMediaTypesEnum = AudioMediaTypesEnum;
 (function (AudioMediaTypesEnum) {
   AudioMediaTypesEnum["Aac"] = "audio/aac";
   AudioMediaTypesEnum["Mp4"] = "audio/mp4";
   AudioMediaTypesEnum["Mpeg"] = "audio/mpeg";
   AudioMediaTypesEnum["Amr"] = "audio/amr";
   AudioMediaTypesEnum["Ogg"] = "audio/ogg";
-})(AudioMediaTypesEnum = exports.AudioMediaTypesEnum || (exports.AudioMediaTypesEnum = {}));
+})(AudioMediaTypesEnum || (exports.AudioMediaTypesEnum = AudioMediaTypesEnum = {}));
 var WebhookTypesEnum;
+exports.WebhookTypesEnum = WebhookTypesEnum;
 (function (WebhookTypesEnum) {
   WebhookTypesEnum["Audio"] = "audio";
   WebhookTypesEnum["Button"] = "button";
@@ -146,23 +163,27 @@ var WebhookTypesEnum;
   WebhookTypesEnum["System"] = "system";
   WebhookTypesEnum["Unknown"] = "unknown";
   WebhookTypesEnum["Video"] = "video";
-})(WebhookTypesEnum = exports.WebhookTypesEnum || (exports.WebhookTypesEnum = {}));
+})(WebhookTypesEnum || (exports.WebhookTypesEnum = WebhookTypesEnum = {}));
 var SystemChangeTypesEnum;
+exports.SystemChangeTypesEnum = SystemChangeTypesEnum;
 (function (SystemChangeTypesEnum) {
   SystemChangeTypesEnum["CustomerChangedNumber"] = "customer_changed_number";
   SystemChangeTypesEnum["CustomerIdentityChanged"] = "customer_identity_changed";
-})(SystemChangeTypesEnum = exports.SystemChangeTypesEnum || (exports.SystemChangeTypesEnum = {}));
+})(SystemChangeTypesEnum || (exports.SystemChangeTypesEnum = SystemChangeTypesEnum = {}));
 var ReferralSourceTypesEnum;
+exports.ReferralSourceTypesEnum = ReferralSourceTypesEnum;
 (function (ReferralSourceTypesEnum) {
   ReferralSourceTypesEnum["Ad"] = "ad";
   ReferralSourceTypesEnum["Post"] = "post";
-})(ReferralSourceTypesEnum = exports.ReferralSourceTypesEnum || (exports.ReferralSourceTypesEnum = {}));
+})(ReferralSourceTypesEnum || (exports.ReferralSourceTypesEnum = ReferralSourceTypesEnum = {}));
 var RequestCodeMethodsEnum;
+exports.RequestCodeMethodsEnum = RequestCodeMethodsEnum;
 (function (RequestCodeMethodsEnum) {
   RequestCodeMethodsEnum["Sms"] = "SMS";
   RequestCodeMethodsEnum["Voice"] = "VOICE";
-})(RequestCodeMethodsEnum = exports.RequestCodeMethodsEnum || (exports.RequestCodeMethodsEnum = {}));
+})(RequestCodeMethodsEnum || (exports.RequestCodeMethodsEnum = RequestCodeMethodsEnum = {}));
 var LanguagesEnum;
+exports.LanguagesEnum = LanguagesEnum;
 (function (LanguagesEnum) {
   LanguagesEnum["Afrikaans"] = "af";
   LanguagesEnum["Albanian"] = "sq";
@@ -235,8 +256,9 @@ var LanguagesEnum;
   LanguagesEnum["Uzbek"] = "uz";
   LanguagesEnum["Vietnamese"] = "vi";
   LanguagesEnum["Zulu"] = "zu";
-})(LanguagesEnum = exports.LanguagesEnum || (exports.LanguagesEnum = {}));
+})(LanguagesEnum || (exports.LanguagesEnum = LanguagesEnum = {}));
 var CurrencyCodesEnum;
+exports.CurrencyCodesEnum = CurrencyCodesEnum;
 (function (CurrencyCodesEnum) {
   CurrencyCodesEnum["AFN"] = "AFN";
   CurrencyCodesEnum["EUR"] = "EUR";
@@ -540,4 +562,4 @@ var CurrencyCodesEnum;
   CurrencyCodesEnum["XFO"] = "XFO";
   CurrencyCodesEnum["XRE"] = "XRE";
   CurrencyCodesEnum["XFU"] = "XFU";
-})(CurrencyCodesEnum = exports.CurrencyCodesEnum || (exports.CurrencyCodesEnum = {}));
+})(CurrencyCodesEnum || (exports.CurrencyCodesEnum = CurrencyCodesEnum = {}));

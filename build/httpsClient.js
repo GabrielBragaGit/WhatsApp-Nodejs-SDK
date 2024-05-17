@@ -1,5 +1,12 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.HttpsClientResponse = void 0;
+var _https = require("https");
+var _logger = require("./logger");
+var _enums = require("./types/enums");
 /**
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  * All rights reserved.
@@ -7,24 +14,13 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.HttpsClientResponse = void 0;
-const https_1 = require("https");
-const logger_1 = __importDefault(require("./logger"));
-const enums_1 = require("./types/enums");
+
 const LIB_NAME = 'HttpsClient';
 const LOG_LOCAL = false;
-const LOGGER = new logger_1.default(LIB_NAME, process.env.DEBUG === 'true' || LOG_LOCAL);
+const LOGGER = new _logger(LIB_NAME, process.env.DEBUG === 'true' || LOG_LOCAL);
 class HttpsClient {
   constructor() {
-    this.agent = new https_1.Agent({
+    this.agent = new _https.Agent({
       keepAlive: true
     });
   }
@@ -35,7 +31,7 @@ class HttpsClient {
   async sendRequest(hostname, port, path, method, headers, timeout, requestData) {
     const agent = this.agent;
     return new Promise((resolve, reject) => {
-      const req = (0, https_1.request)({
+      const req = (0, _https.request)({
         hostname: hostname,
         port: port,
         path: path,
@@ -65,11 +61,11 @@ class HttpsClient {
         if (socket.connecting) {
           socket.once('secureConnect', () => {
             LOGGER.log(requestData);
-            if (method === enums_1.HttpMethodsEnum.Post || method == enums_1.HttpMethodsEnum.Put) req.write(requestData);
+            if (method === _enums.HttpMethodsEnum.Post || method == _enums.HttpMethodsEnum.Put) req.write(requestData);
             req.end();
           });
         } else {
-          if (method === enums_1.HttpMethodsEnum.Post || method == enums_1.HttpMethodsEnum.Put) req.write(requestData);
+          if (method === _enums.HttpMethodsEnum.Post || method == _enums.HttpMethodsEnum.Put) req.write(requestData);
           req.end();
         }
       });

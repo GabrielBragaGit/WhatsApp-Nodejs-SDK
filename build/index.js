@@ -1,13 +1,10 @@
 "use strict";
 
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-const WhatsApp_1 = __importDefault(require("./WhatsApp"));
-module.exports = WhatsApp_1.default;
-exports.default = WhatsApp_1.default;
+exports.default = void 0;
+var _WhatsApp = require("./WhatsApp");
+var _default = _WhatsApp;
+exports.default = _default;
+module.exports = exports.default;

@@ -1,5 +1,11 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _httpsClient = require("./httpsClient");
+var _logger = require("./logger");
 /**
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  * All rights reserved.
@@ -7,24 +13,15 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-const httpsClient_1 = __importDefault(require("./httpsClient"));
-const logger_1 = __importDefault(require("./logger"));
+
 const LIB_NAME = 'REQUESTER';
 const LOG_LOCAL = false;
-const LOGGER = new logger_1.default(LIB_NAME, process.env.DEBUG === 'true' || LOG_LOCAL);
+const LOGGER = new _logger(LIB_NAME, process.env.DEBUG === 'true' || LOG_LOCAL);
 class Requester {
   constructor(host, apiVersion, phoneNumberId, accessToken, businessAcctId, appId, userAgent) {
     this.protocol = 'https:';
     this.port = 443;
-    this.client = new httpsClient_1.default();
+    this.client = new _httpsClient();
     this.host = host;
     this.apiVersion = apiVersion;
     this.phoneNumberId = phoneNumberId;

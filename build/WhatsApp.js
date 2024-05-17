@@ -1,5 +1,20 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _messages = require("./api/messages");
+var _phoneNumbers = require("./api/phoneNumbers");
+var _twoStepVerification = require("./api/twoStepVerification");
+var _webhooks = require("./api/webhooks");
+var _logger = require("./logger");
+var _requester = require("./requester");
+var SDKEnums = _interopRequireWildcard(require("./types/enums"), true);
+var _utils = require("./utils");
+var _version = require("./version");
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /**
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  * All rights reserved.
@@ -7,70 +22,26 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
-  if (k2 === undefined) k2 = k;
-  var desc = Object.getOwnPropertyDescriptor(m, k);
-  if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-    desc = {
-      enumerable: true,
-      get: function () {
-        return m[k];
-      }
-    };
-  }
-  Object.defineProperty(o, k2, desc);
-} : function (o, m, k, k2) {
-  if (k2 === undefined) k2 = k;
-  o[k2] = m[k];
-});
-var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
-  Object.defineProperty(o, "default", {
-    enumerable: true,
-    value: v
-  });
-} : function (o, v) {
-  o["default"] = v;
-});
-var __importStar = this && this.__importStar || function (mod) {
-  if (mod && mod.__esModule) return mod;
-  var result = {};
-  if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-  __setModuleDefault(result, mod);
-  return result;
-};
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-if (process.env.NODE_ENV !== 'production' || process.env.TS_NODE_DEV === 'true') {
-  Promise.resolve().then(() => __importStar(require('dotenv'))).then(dotenv => dotenv.config());
-}
-const messages_1 = __importDefault(require("./api/messages"));
-const phoneNumbers_1 = __importDefault(require("./api/phoneNumbers"));
-const twoStepVerification_1 = __importDefault(require("./api/twoStepVerification"));
-const webhooks_1 = __importDefault(require("./api/webhooks"));
-const logger_1 = __importDefault(require("./logger"));
-const requester_1 = __importDefault(require("./requester"));
-const SDKEnums = __importStar(require("./types/enums"));
-const utils_1 = require("./utils");
-const version_1 = require("./version");
+// if (
+// 	process.env.NODE_ENV !== 'production' ||
+// 	process.env.TS_NODE_DEV === 'true'
+// ) {
+// 	import('dotenv').then((dotenv) => dotenv.config());
+// }
+
 const LIB_NAME = 'WHATSAPP';
 const LOG_LOCAL = false;
-const LOGGER = new logger_1.default(LIB_NAME, process.env.DEBUG === 'true' || LOG_LOCAL);
+const LOGGER = new _logger(LIB_NAME, process.env.DEBUG === 'true' || LOG_LOCAL);
 const headerPrefix = 'WA_SDK';
 class WhatsApp {
   constructor(senderNumberId, config) {
-    this.sdkVersion = version_1.SDKVersion;
-    if (config) this.config = (0, utils_1.importConfig)(senderNumberId, config);else this.config = (0, utils_1.importConfig)(senderNumberId);
-    this.requester = new requester_1.default(this.config[SDKEnums.WAConfigEnum.BaseURL], this.config[SDKEnums.WAConfigEnum.APIVersion], this.config[SDKEnums.WAConfigEnum.PhoneNumberId], this.config[SDKEnums.WAConfigEnum.AccessToken], this.config[SDKEnums.WAConfigEnum.BusinessAcctId], this.config[SDKEnums.WAConfigEnum.AppId], this.userAgent());
-    this.messages = new messages_1.default(this.config, this.requester);
-    this.phoneNumbers = new phoneNumbers_1.default(this.config, this.requester);
-    this.twoStepVerification = new twoStepVerification_1.default(this.config, this.requester);
-    this.webhooks = new webhooks_1.default(this.config, this.requester, this.userAgent());
+    this.sdkVersion = _version.SDKVersion;
+    if (config) this.config = (0, _utils.importConfig)(senderNumberId, config);else this.config = (0, _utils.importConfig)(senderNumberId);
+    this.requester = new _requester(this.config[SDKEnums.WAConfigEnum.BaseURL], this.config[SDKEnums.WAConfigEnum.APIVersion], this.config[SDKEnums.WAConfigEnum.PhoneNumberId], this.config[SDKEnums.WAConfigEnum.AccessToken], this.config[SDKEnums.WAConfigEnum.BusinessAcctId], this.config[SDKEnums.WAConfigEnum.AppId], this.userAgent());
+    this.messages = new _messages(this.config, this.requester);
+    this.phoneNumbers = new _phoneNumbers(this.config, this.requester);
+    this.twoStepVerification = new _twoStepVerification(this.config, this.requester);
+    this.webhooks = new _webhooks(this.config, this.requester, this.userAgent());
     LOGGER.log('WhatsApp Node.js SDK instantiated!');
   }
   version() {
@@ -97,5 +68,6 @@ class WhatsApp {
   }
 }
 WhatsApp.Enums = SDKEnums;
-exports.default = WhatsApp;
+var _default = WhatsApp;
+exports.default = _default;
 module.exports = exports.default;

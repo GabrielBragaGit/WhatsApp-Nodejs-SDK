@@ -1,5 +1,14 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _enums = require("../types/enums");
+var _utils = require("../utils");
+var _httpsServer = require("../httpsServer");
+var _base = require("./base");
+var _logger = require("../logger");
 /**
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  * All rights reserved.
@@ -7,36 +16,24 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-const enums_1 = require("../types/enums");
-const utils_1 = require("../utils");
-const httpsServer_1 = __importDefault(require("../httpsServer"));
-const base_1 = __importDefault(require("./base"));
-const logger_1 = __importDefault(require("../logger"));
+
 const LIB_NAME = 'WEBHOOKS';
 const LOG_LOCAL = true;
-const LOGGER = new logger_1.default(LIB_NAME, process.env.DEBUG === 'true' || LOG_LOCAL);
-class WebhooksAPI extends base_1.default {
+const LOGGER = new _logger(LIB_NAME, process.env.DEBUG === 'true' || LOG_LOCAL);
+class WebhooksAPI extends _base {
   constructor(config, HttpsClient, userAgent) {
     super(config, HttpsClient);
     this.userAgent = userAgent;
   }
   start(cb) {
-    this.server = new httpsServer_1.default(this.config[enums_1.WAConfigEnum.ListenerPort], (req, res) => {
+    this.server = new _httpsServer(this.config[_enums.WAConfigEnum.ListenerPort], (req, res) => {
       res.setHeader('User-Agent', this.userAgent);
       if (req.url) {
         const requestPath = new URL(req.url, `https://${req.headers.host}`);
         LOGGER.log(`received request (method: ${req.method}) for URL ${requestPath}`);
-        if (requestPath.pathname == `/${this.config[enums_1.WAConfigEnum.WebhookEndpoint]}`) {
+        if (requestPath.pathname == `/${this.config[_enums.WAConfigEnum.WebhookEndpoint]}`) {
           if (req.method === 'GET') {
-            if (requestPath.searchParams.get('hub.mode') == 'subscribe' && requestPath.searchParams.get('hub.verify_token') == this.config[enums_1.WAConfigEnum.WebhookVerificationToken]) {
+            if (requestPath.searchParams.get('hub.mode') == 'subscribe' && requestPath.searchParams.get('hub.verify_token') == this.config[_enums.WAConfigEnum.WebhookVerificationToken]) {
               res.write(requestPath.searchParams.get('hub.challenge'));
               res.end();
               LOGGER.log(`webhook subscription request from ${requestPath.href} successfully verified`);
@@ -59,7 +56,7 @@ class WebhooksAPI extends base_1.default {
 
             req.on('end', () => {
               const body = Buffer.concat(bodyBuf).toString();
-              const generatedSignature = (0, utils_1.generateXHub256Sig)(body, this.config[enums_1.WAConfigEnum.AppSecret]);
+              const generatedSignature = (0, _utils.generateXHub256Sig)(body, this.config[_enums.WAConfigEnum.AppSecret]);
               const cbBody = JSON.parse(body);
               if (generatedSignature == xHubSignature) {
                 const responseStatus = 200;
