@@ -30,14 +30,18 @@ const emptyConfigChecker = senderNumberId => {
     LOGGER.log(`Environmental variable: WA_PHONE_NUMBER_ID and/or sender phone number id arguement is undefined.`);
     throw new Error('Missing WhatsApp sender phone number Id.');
   }
-  for (const value of Object.values(_enums.WARequiredConfigEnum)) {
-    LOGGER.log(value + ' ---- ' + process.env[`${value}`]);
-    if (process.env[`${value}`] === undefined || process.env[`${value}`] === '') {
-      LOGGER.log(`Environmental variable: ${value} is undefined`);
-      throw new Error('Invalid configuration.');
-    }
-  }
+  // for (const value of Object.values(WARequiredConfigEnum)) {
+  // 	LOGGER.log(value + ' ---- ' + process.env[`${value}`]);
+  // 	if (
+  // 		process.env[`${value}`] === undefined ||
+  // 		process.env[`${value}`] === ''
+  // 	) {
+  // 		LOGGER.log(`Environmental variable: ${value} is undefined`);
+  // 		throw new Error('Invalid configuration.');
+  // 	}
+  // }
 };
+
 const importConfig = (senderNumberId, configToImport) => {
   emptyConfigChecker(senderNumberId);
   if (configToImport === undefined) {

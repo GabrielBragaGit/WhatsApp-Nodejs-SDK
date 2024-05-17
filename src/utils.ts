@@ -9,7 +9,7 @@
 import * as crypto from 'crypto';
 import Logger from './logger';
 import { WAConfigType } from './types/config';
-import { WAConfigEnum, WARequiredConfigEnum } from './types/enums';
+import { WAConfigEnum } from './types/enums';
 
 const LIB_NAME = 'UTILS';
 const LOG_LOCAL = false;
@@ -32,16 +32,16 @@ const emptyConfigChecker = (senderNumberId?: number) => {
 		throw new Error('Missing WhatsApp sender phone number Id.');
 	}
 
-	for (const value of Object.values(WARequiredConfigEnum)) {
-		LOGGER.log(value + ' ---- ' + process.env[`${value}`]);
-		if (
-			process.env[`${value}`] === undefined ||
-			process.env[`${value}`] === ''
-		) {
-			LOGGER.log(`Environmental variable: ${value} is undefined`);
-			throw new Error('Invalid configuration.');
-		}
-	}
+	// for (const value of Object.values(WARequiredConfigEnum)) {
+	// 	LOGGER.log(value + ' ---- ' + process.env[`${value}`]);
+	// 	if (
+	// 		process.env[`${value}`] === undefined ||
+	// 		process.env[`${value}`] === ''
+	// 	) {
+	// 		LOGGER.log(`Environmental variable: ${value} is undefined`);
+	// 		throw new Error('Invalid configuration.');
+	// 	}
+	// }
 };
 
 export const importConfig = (
