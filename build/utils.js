@@ -41,7 +41,6 @@ const emptyConfigChecker = senderNumberId => {
   // 	}
   // }
 };
-
 const importConfig = (senderNumberId, configToImport) => {
   emptyConfigChecker(senderNumberId);
   if (configToImport === undefined) {

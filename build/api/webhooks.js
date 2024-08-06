@@ -54,7 +54,6 @@ class WebhooksAPI extends _base.default {
               bodyBuf = bodyBuf + chunk; // linter bug where push() and "+=" throws an error
               if (bodyBuf.length > 1e6) req.destroy(); // close connection if payload is larger than 1MB for some reason
             });
-
             req.on('end', () => {
               const body = Buffer.concat(bodyBuf).toString();
               const generatedSignature = (0, _utils.generateXHub256Sig)(body, this.config[_enums.WAConfigEnum.AppSecret]);

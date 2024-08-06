@@ -6,28 +6,54 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+import { lookup } from 'dns';
 import { IncomingMessage } from 'http';
-import { request, Agent } from 'https';
+import { Agent, request } from 'https';
+import { promisify } from 'util';
+import Logger from './logger';
+import { HttpMethodsEnum } from './types/enums';
 import {
 	HttpsClientClass,
 	HttpsClientResponseClass,
-	RequestHeaders,
 	RequestData,
+	RequestHeaders,
 	ResponseHeaders,
 	ResponseJSONBody,
 } from './types/httpsClient';
-import Logger from './logger';
-import { HttpMethodsEnum } from './types/enums';
+
+const asyncLookup = promisify(lookup);
 
 const LIB_NAME = 'HttpsClient';
 const LOG_LOCAL = false;
 const LOGGER = new Logger(LIB_NAME, process.env.DEBUG === 'true' || LOG_LOCAL);
 
+interface DNSCacheEntry {
+	ip: string;
+	timestamp: number;
+}
+
 export default class HttpsClient implements HttpsClientClass {
 	agent: Agent;
+	private dnsCache: Map<string, DNSCacheEntry>;
+	private dnsCacheTTL: number;
 
 	constructor() {
 		this.agent = new Agent({ keepAlive: true });
+		this.dnsCache = new Map();
+		this.dnsCacheTTL = 1800000; // 30 minutos em milissegundos
+		// this.dnsCacheTTL = 300000; // 5 minutos em milissegundos
+	}
+
+	private async cachedDnsLookup(hostname: string): Promise<string> {
+		const now = Date.now();
+		const cached = this.dnsCache.get(hostname);
+		if (cached && cached.timestamp + this.dnsCacheTTL > now) {
+			return cached.ip;
+		}
+
+		const { address } = await asyncLookup(hostname);
+		this.dnsCache.set(hostname, { ip: address, timestamp: now });
+		return address;
 	}
 
 	clearSockets(): boolean {
@@ -43,59 +69,88 @@ export default class HttpsClient implements HttpsClientClass {
 		headers: RequestHeaders,
 		timeout: number,
 		requestData?: RequestData,
+		retries: number = 3,
 	): Promise<HttpsClientResponseClass> {
 		const agent = this.agent;
 
-		return new Promise<HttpsClientResponseClass>((resolve, reject) => {
-			const req = request({
-				hostname: hostname,
-				port: port,
-				path: path,
-				method: method,
-				agent: agent,
-				headers: headers,
-			});
+		const makeRequest = async (): Promise<HttpsClientResponseClass> => {
+			const ip = await this.cachedDnsLookup(hostname);
 
-			LOGGER.log({
-				hostname: hostname,
-				port: port,
-				path,
-				method,
-				agent,
-				headers,
-			});
+			return new Promise<HttpsClientResponseClass>((resolve, reject) => {
+				const req = request({
+					hostname: ip,
+					servername: hostname, // Importante para SNI
+					port: port,
+					path: path,
+					method: method,
+					agent: agent,
+					headers: headers,
+				});
 
-			req.setTimeout(timeout, () => {
-				// TODO: Handle timeout error with error handler CB and custom error code
-				req.destroy();
-			});
+				LOGGER.log({
+					hostname: hostname,
+					ip: ip,
+					port: port,
+					path,
+					method,
+					agent,
+					headers,
+				});
 
-			req.on('response', (resp) => {
-				resolve(new HttpsClientResponse(resp));
-			});
+				req.setTimeout(timeout, () => {
+					// TODO: Handle timeout error with error handler CB and custom error code
+					req.destroy(new Error('Request timeout'));
+				});
 
-			req.on('error', (error) => {
-				reject(error);
-			});
+				req.on('response', (resp) => {
+					resolve(new HttpsClientResponse(resp));
+				});
 
-			req.once('socket', (socket) => {
-				if (socket.connecting) {
-					socket.once('secureConnect', () => {
-						LOGGER.log(requestData);
+				req.on('error', (error) => {
+					reject(error);
+				});
+
+				req.once('socket', (socket) => {
+					if (socket.connecting) {
+						socket.once('secureConnect', () => {
+							LOGGER.log(requestData);
+							if (
+								method === HttpMethodsEnum.Post ||
+								method == HttpMethodsEnum.Put
+							)
+								req.write(requestData);
+							req.end();
+						});
+					} else {
 						if (
 							method === HttpMethodsEnum.Post ||
 							method == HttpMethodsEnum.Put
 						)
 							req.write(requestData);
 						req.end();
-					});
-				} else {
-					if (method === HttpMethodsEnum.Post || method == HttpMethodsEnum.Put)
-						req.write(requestData);
-					req.end();
-				}
+					}
+				});
 			});
-		});
+		};
+
+		let lastError: Error | null = null;
+		for (let i = 0; i < retries; i++) {
+			try {
+				return await makeRequest();
+			} catch (error) {
+				lastError = error as Error;
+				LOGGER.log(
+					`Request failed (attempt ${i + 1}/${retries}): ${lastError.message}`,
+				);
+				if (i < retries - 1) {
+					await new Promise((resolve) =>
+						setTimeout(resolve, 2000 * Math.pow(2, i)),
+					); // Exponential backoff
+				}
+			}
+		}
+
+		throw lastError || new Error('Request failed after retries');
 	}
 }
 

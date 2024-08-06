@@ -4,7 +4,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = exports.HttpsClientResponse = void 0;
+var _dns = require("dns");
 var _https = require("https");
+var _util = require("util");
 var _logger = _interopRequireDefault(require("./logger"));
 var _enums = require("./types/enums");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -16,6 +18,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * LICENSE file in the root directory of this source tree.
  */
 
+const asyncLookup = (0, _util.promisify)(_dns.lookup);
 const LIB_NAME = 'HttpsClient';
 const LOG_LOCAL = false;
 const LOGGER = new _logger.default(LIB_NAME, process.env.DEBUG === 'true' || LOG_LOCAL);
@@ -24,53 +27,89 @@ class HttpsClient {
     this.agent = new _https.Agent({
       keepAlive: true
     });
+    this.dnsCache = new Map();
+    this.dnsCacheTTL = 1800000; // 30 minutos em milissegundos
+    // this.dnsCacheTTL = 300000; // 5 minutos em milissegundos
+  }
+  async cachedDnsLookup(hostname) {
+    const now = Date.now();
+    const cached = this.dnsCache.get(hostname);
+    if (cached && cached.timestamp + this.dnsCacheTTL > now) {
+      return cached.ip;
+    }
+    const {
+      address
+    } = await asyncLookup(hostname);
+    this.dnsCache.set(hostname, {
+      ip: address,
+      timestamp: now
+    });
+    return address;
   }
   clearSockets() {
     this.agent.destroy();
     return true;
   }
-  async sendRequest(hostname, port, path, method, headers, timeout, requestData) {
+  async sendRequest(hostname, port, path, method, headers, timeout, requestData, retries = 3) {
     const agent = this.agent;
-    return new Promise((resolve, reject) => {
-      const req = (0, _https.request)({
-        hostname: hostname,
-        port: port,
-        path: path,
-        method: method,
-        agent: agent,
-        headers: headers
-      });
-      LOGGER.log({
-        hostname: hostname,
-        port: port,
-        path,
-        method,
-        agent,
-        headers
-      });
-      req.setTimeout(timeout, () => {
-        // TODO: Handle timeout error with error handler CB and custom error code
-        req.destroy();
-      });
-      req.on('response', resp => {
-        resolve(new HttpsClientResponse(resp));
-      });
-      req.on('error', error => {
-        reject(error);
-      });
-      req.once('socket', socket => {
-        if (socket.connecting) {
-          socket.once('secureConnect', () => {
-            LOGGER.log(requestData);
+    const makeRequest = async () => {
+      const ip = await this.cachedDnsLookup(hostname);
+      return new Promise((resolve, reject) => {
+        const req = (0, _https.request)({
+          hostname: ip,
+          servername: hostname,
+          port: port,
+          path: path,
+          method: method,
+          agent: agent,
+          headers: headers
+        });
+        LOGGER.log({
+          hostname: hostname,
+          ip: ip,
+          port: port,
+          path,
+          method,
+          agent,
+          headers
+        });
+        req.setTimeout(timeout, () => {
+          // TODO: Handle timeout error with error handler CB and custom error code
+          req.destroy(new Error('Request timeout'));
+        });
+        req.on('response', resp => {
+          resolve(new HttpsClientResponse(resp));
+        });
+        req.on('error', error => {
+          reject(error);
+        });
+        req.once('socket', socket => {
+          if (socket.connecting) {
+            socket.once('secureConnect', () => {
+              LOGGER.log(requestData);
+              if (method === _enums.HttpMethodsEnum.Post || method == _enums.HttpMethodsEnum.Put) req.write(requestData);
+              req.end();
+            });
+          } else {
             if (method === _enums.HttpMethodsEnum.Post || method == _enums.HttpMethodsEnum.Put) req.write(requestData);
             req.end();
-          });
-        } else {
-          if (method === _enums.HttpMethodsEnum.Post || method == _enums.HttpMethodsEnum.Put) req.write(requestData);
-          req.end();
-        }
+          }
+        });
       });
-    });
+    };
+    let lastError = null;
+    for (let i = 0; i < retries; i++) {
+      try {
+        return await makeRequest();
+      } catch (error) {
+        lastError = error;
+        LOGGER.log(`Request failed (attempt ${i + 1}/${retries}): ${lastError.message}`);
+        if (i < retries - 1) {
+          await new Promise(resolve => setTimeout(resolve, 2000 * Math.pow(2, i))); // Exponential backoff
+        }
+      }
+    }
+    throw lastError || new Error('Request failed after retries');
   }
 }
 exports.default = HttpsClient;

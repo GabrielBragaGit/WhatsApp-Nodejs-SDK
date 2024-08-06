@@ -9,12 +9,15 @@
 /// <reference types="node" />
 import { IncomingMessage } from 'http';
 import { Agent } from 'https';
-import { HttpsClientClass, HttpsClientResponseClass, RequestHeaders, RequestData, ResponseHeaders, ResponseJSONBody } from './types/httpsClient';
+import { HttpsClientClass, HttpsClientResponseClass, RequestData, RequestHeaders, ResponseHeaders, ResponseJSONBody } from './types/httpsClient';
 export default class HttpsClient implements HttpsClientClass {
     agent: Agent;
+    private dnsCache;
+    private dnsCacheTTL;
     constructor();
+    private cachedDnsLookup;
     clearSockets(): boolean;
-    sendRequest(hostname: string, port: number, path: string, method: string, headers: RequestHeaders, timeout: number, requestData?: RequestData): Promise<HttpsClientResponseClass>;
+    sendRequest(hostname: string, port: number, path: string, method: string, headers: RequestHeaders, timeout: number, requestData?: RequestData, retries?: number): Promise<HttpsClientResponseClass>;
 }
 export declare class HttpsClientResponse implements HttpsClientResponseClass {
     resp: IncomingMessage;
