@@ -1,13 +1,3 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _base = _interopRequireDefault(require("./base"));
-var _enums = require("../types/enums");
-var _logger = _interopRequireDefault(require("../logger"));
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 /**
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  * All rights reserved.
@@ -15,22 +5,21 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-
+import BaseAPI from './base';
+import { HttpMethodsEnum, WAConfigEnum } from '../types/enums';
+import Logger from '../logger';
 const LIB_NAME = 'TWOSTEPVERIFICATION_API';
 const LOG_LOCAL = false;
-const LOGGER = new _logger.default(LIB_NAME, process.env.DEBUG === 'true' || LOG_LOCAL);
-class TwoStepVerificationAPI extends _base.default {
-  constructor() {
-    super(...arguments);
-    this.commonMethod = _enums.HttpMethodsEnum.Post;
-    this.commonEndpoint = '';
-  }
-  setPin(pin) {
-    const body = {
-      pin: pin.toString()
-    };
-    LOGGER.log(`Setting two-step verification pin for phone number Id ${this.config[_enums.WAConfigEnum.PhoneNumberId]}`);
-    return this.client.sendCAPIRequest(this.commonMethod, this.commonEndpoint, this.config[_enums.WAConfigEnum.RequestTimeout], JSON.stringify(body));
-  }
+const LOGGER = new Logger(LIB_NAME, process.env.DEBUG === 'true' || LOG_LOCAL);
+export default class TwoStepVerificationAPI extends BaseAPI {
+    constructor() {
+        super(...arguments);
+        this.commonMethod = HttpMethodsEnum.Post;
+        this.commonEndpoint = '';
+    }
+    setPin(pin) {
+        const body = { pin: pin.toString() };
+        LOGGER.log(`Setting two-step verification pin for phone number Id ${this.config[WAConfigEnum.PhoneNumberId]}`);
+        return this.client.sendCAPIRequest(this.commonMethod, this.commonEndpoint, this.config[WAConfigEnum.RequestTimeout], JSON.stringify(body));
+    }
 }
-exports.default = TwoStepVerificationAPI;

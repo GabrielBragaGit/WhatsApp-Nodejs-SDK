@@ -74,7 +74,13 @@ export default class HttpsClient implements HttpsClientClass {
 		const agent = this.agent;
 
 		const makeRequest = async (): Promise<HttpsClientResponseClass> => {
-			const ip = await this.cachedDnsLookup(hostname);
+			let ip;
+			try {
+				ip = await this.cachedDnsLookup(hostname);
+			} catch (dnsError: any) {
+				LOGGER.log(`DNS lookup failed: ${dnsError.message}`);
+				ip = hostname; // Fallback para o hostname original se a resolução DNS falhar
+			}
 
 			return new Promise<HttpsClientResponseClass>((resolve, reject) => {
 				const req = request({
