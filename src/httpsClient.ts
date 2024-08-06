@@ -99,7 +99,8 @@ export default class HttpsClient implements HttpsClientClass {
 
 				req.setTimeout(timeout, () => {
 					// TODO: Handle timeout error with error handler CB and custom error code
-					req.destroy(new Error('Request timeout'));
+					req.destroy();
+					reject(new Error('Request timeout'));
 				});
 
 				req.on('response', (resp) => {
@@ -137,11 +138,14 @@ export default class HttpsClient implements HttpsClientClass {
 		for (let i = 0; i < retries; i++) {
 			try {
 				return await makeRequest();
-			} catch (error) {
+			} catch (error: any) {
 				lastError = error as Error;
 				LOGGER.log(
-					`Request failed (attempt ${i + 1}/${retries}): ${lastError.message}`,
+					`Request failed (attempt ${i + 1}/${retries}): ${error.message}`,
 				);
+				if (error.statusCode) {
+					LOGGER.log(`Status Code: ${error.statusCode}, Body: ${error.body}`);
+				}
 				if (i < retries - 1) {
 					await new Promise((resolve) =>
 						setTimeout(resolve, 2000 * Math.pow(2, i)),
@@ -150,7 +154,20 @@ export default class HttpsClient implements HttpsClientClass {
 			}
 		}
 
-		throw lastError || new Error('Request failed after retries');
+		return new Promise<HttpsClientResponseClass>((resolve, reject) => {
+			reject(lastError);
+		});
+		// throw lastError || new Error('Request failed after retries');
+		// Se todas as tentativas falharem, retornamos uma resposta de erro personalizada
+		// const erro: HttpsClientResponseClass = {
+		// 	statusCode: () => 500,
+		// 	headers: () => ({}),
+		// 	rawResponse: () => {aborted: true},
+		// 	responseBodyToJSON: async () => ({
+		// 		error: true,
+		// 		message: 'Request failed after all retries',
+		// 	}),
+		// };
 	}
 }
 

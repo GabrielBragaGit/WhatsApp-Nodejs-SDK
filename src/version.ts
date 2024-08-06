@@ -8,4 +8,4 @@
 
 import { semanticVersionString } from "./types/version";
 
-export const SDKVersion: semanticVersionString = '0.0.10-Alpha';
+export const SDKVersion: semanticVersionString = '0.0.11-Alpha';
