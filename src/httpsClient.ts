@@ -74,7 +74,7 @@ export default class HttpsClient implements HttpsClientClass {
 		const agent = this.agent;
 
 		const makeRequest = async (): Promise<HttpsClientResponseClass> => {
-			let ip;
+			let ip: any;
 			try {
 				ip = await this.cachedDnsLookup(hostname);
 			} catch (dnsError: any) {
