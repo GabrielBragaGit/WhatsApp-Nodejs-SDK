@@ -61,15 +61,24 @@ class HttpsClient {
         ip = hostname; // Fallback para o hostname original se a resolução DNS falhar
       }
       return new Promise((resolve, reject) => {
-        const req = (0, _https.request)({
-          hostname: ip,
-          servername: hostname,
+        const options = {
+          hostname: hostname,
           port: port,
           path: path,
           method: method,
           agent: agent,
-          headers: headers
-        });
+          headers: {
+            ...headers,
+            Host: hostname // Adicione o header 'Host' explicitamente
+          },
+          servername: hostname // Mantenha o SNI
+        };
+        // Se temos um IP resolvido, use-o para conectar, mas mantenha o hostname para SNI
+        if (ip !== hostname) {
+          options.hostname = ip;
+          options.headers['Host'] = hostname;
+        }
+        const req = (0, _https.request)(options);
         LOGGER.log({
           hostname: hostname,
           ip: ip,

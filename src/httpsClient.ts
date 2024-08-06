@@ -83,15 +83,26 @@ export default class HttpsClient implements HttpsClientClass {
 			}
 
 			return new Promise<HttpsClientResponseClass>((resolve, reject) => {
-				const req = request({
-					hostname: ip,
-					servername: hostname, // Importante para SNI
+				const options = {
+					hostname: hostname, // Use o hostname original aqui
 					port: port,
 					path: path,
 					method: method,
 					agent: agent,
-					headers: headers,
-				});
+					headers: {
+						...headers,
+						Host: hostname, // Adicione o header 'Host' explicitamente
+					},
+					servername: hostname, // Mantenha o SNI
+				};
+
+				// Se temos um IP resolvido, use-o para conectar, mas mantenha o hostname para SNI
+				if (ip !== hostname) {
+					options.hostname = ip;
+					options.headers['Host'] = hostname;
+				}
+
+				const req = request(options);
 
 				LOGGER.log({
 					hostname: hostname,
