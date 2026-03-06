@@ -103,11 +103,19 @@ class HttpsClient {
           if (socket.connecting) {
             socket.once('secureConnect', () => {
               LOGGER.log(requestData);
-              if (method === _enums.HttpMethodsEnum.Post || method == _enums.HttpMethodsEnum.Put) req.write(requestData);
+              if ((method === _enums.HttpMethodsEnum.Post || method == _enums.HttpMethodsEnum.Put) && requestData) {
+                if (!socket.destroyed && socket.writable) {
+                  req.write(requestData);
+                }
+              }
               req.end();
             });
           } else {
-            if (method === _enums.HttpMethodsEnum.Post || method == _enums.HttpMethodsEnum.Put) req.write(requestData);
+            if ((method === _enums.HttpMethodsEnum.Post || method == _enums.HttpMethodsEnum.Put) && requestData) {
+              if (!socket.destroyed && socket.writable) {
+                req.write(requestData);
+              }
+            }
             req.end();
           }
         });

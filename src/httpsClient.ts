@@ -69,7 +69,7 @@ export default class HttpsClient implements HttpsClientClass {
 		headers: RequestHeaders,
 		timeout: number,
 		requestData?: RequestData,
-		retries: number = 3,
+		retries = 3,
 	): Promise<HttpsClientResponseClass> {
 		const agent = this.agent;
 
@@ -133,18 +133,26 @@ export default class HttpsClient implements HttpsClientClass {
 						socket.once('secureConnect', () => {
 							LOGGER.log(requestData);
 							if (
-								method === HttpMethodsEnum.Post ||
-								method == HttpMethodsEnum.Put
-							)
-								req.write(requestData);
+								(method === HttpMethodsEnum.Post ||
+									method == HttpMethodsEnum.Put) &&
+								requestData
+							) {
+								if (!socket.destroyed && socket.writable) {
+									req.write(requestData);
+								}
+							}
 							req.end();
 						});
 					} else {
 						if (
-							method === HttpMethodsEnum.Post ||
-							method == HttpMethodsEnum.Put
-						)
-							req.write(requestData);
+							(method === HttpMethodsEnum.Post ||
+								method == HttpMethodsEnum.Put) &&
+							requestData
+						) {
+							if (!socket.destroyed && socket.writable) {
+								req.write(requestData);
+							}
+						}
 						req.end();
 					}
 				});
