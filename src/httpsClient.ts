@@ -138,7 +138,11 @@ export default class HttpsClient implements HttpsClientClass {
 								requestData
 							) {
 								if (!socket.destroyed && socket.writable) {
-									req.write(requestData);
+									try {
+										req.write(requestData);
+									} catch (e) {
+										// Ignora erro de escrita se o socket fechar
+									}
 								}
 							}
 							req.end();
@@ -150,11 +154,21 @@ export default class HttpsClient implements HttpsClientClass {
 							requestData
 						) {
 							if (!socket.destroyed && socket.writable) {
-								req.write(requestData);
+								try {
+									req.write(requestData);
+								} catch (e) {
+									// Ignora erro de escrita se o socket fechar
+								}
 							}
 						}
 						req.end();
 					}
+					socket.on('error', (err) => {
+						// Se for EPIPE, ignoramos pois será tratado no retry da requisição
+						if ((err as any).code === 'EPIPE') return;
+						// Outros erros podem ser relevantes
+						// console.error('Socket error:', err);
+					});
 				});
 			});
 		};
