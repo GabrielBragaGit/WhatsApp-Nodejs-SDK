@@ -100,31 +100,29 @@ class HttpsClient {
           reject(error);
         });
         req.once('socket', socket => {
-          if (socket.connecting) {
-            socket.once('secureConnect', () => {
+          const writeData = () => {
+            if (requestData) {
               LOGGER.log(requestData);
-              if ((method === _enums.HttpMethodsEnum.Post || method == _enums.HttpMethodsEnum.Put) && requestData) {
-                if (!socket.destroyed && socket.writable) {
-                  try {
-                    req.write(requestData);
-                  } catch (e) {
-                    // Ignora erro de escrita se o socket fechar
-                  }
-                }
-              }
-              req.end();
-            });
-          } else {
-            if ((method === _enums.HttpMethodsEnum.Post || method == _enums.HttpMethodsEnum.Put) && requestData) {
+            }
+            if ((method === _enums.HttpMethodsEnum.Post || method === _enums.HttpMethodsEnum.Put) && requestData) {
               if (!socket.destroyed && socket.writable) {
                 try {
                   req.write(requestData);
                 } catch (e) {
-                  // Ignora erro de escrita se o socket fechar
+                  LOGGER.log(`Error writing data: ${e}`);
+                  req.destroy(e instanceof Error ? e : new Error(String(e)));
+                  return;
                 }
               }
             }
             req.end();
+          };
+          if (socket.connecting) {
+            socket.once('secureConnect', () => {
+              writeData();
+            });
+          } else {
+            writeData();
           }
           socket.on('error', err => {
             // Se for EPIPE, ignoramos pois será tratado no retry da requisição
